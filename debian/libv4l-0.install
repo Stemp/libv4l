@@ -1,0 +1,4 @@
+usr/lib/lib*.so.*
+usr/lib/libv4l/*.so
+usr/lib/libv4l/ov511-decomp
+usr/lib/libv4l/ov518-decomp

@@ -1,0 +1,144 @@
+Source: v4l-utils
+Section: video
+Priority: optional
+Maintainer: Gregor Jasny <gjasny@googlemail.com>
+Uploaders: Martin Pitt <mpitt@debian.org>,
+           Loic Minier <lool@dooz.org>
+Build-Depends: debhelper (>= 7),
+               libqt4-dev,
+               libsysfs-dev,
+               linux-libc-dev (>= 2.6.19),
+               gcc-multilib [amd64]
+Standards-Version: 3.8.4
+Vcs-Browser: http://git.debian.org/?p=collab-maint/libv4l.git
+Vcs-Git: git://git.debian.org/git/collab-maint/libv4l.git
+Homepage: http://linuxtv.org/downloads/v4l-utils/
+
+Package: libv4l-0
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: Collection of video4linux support libraries
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains the shared libraries.
+
+Package: libv4l-dev
+Section: libdevel
+Architecture: any
+Depends: libv4l-0 (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Suggests: pkg-config (>= 0.18)
+Description: Collection of video4linux support libraries (development files)
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains development files (headers and static libraries).
+
+Package: lib32v4l-0
+Section: libs
+Architecture: amd64
+Depends: libv4l-0 (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Description: Collection of video4linux support libraries (32 bits)
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains the 32 bits version of the shared libraries.
+
+Package: lib32v4l-dev
+Section: libdevel
+Architecture: amd64
+Depends: libv4l-0 (= ${binary:Version}),
+         lib32v4l-0 (= ${binary:Version}),
+         libv4l-dev (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Description: Collection of video4linux support libraries (32 bits development files)
+ libv4l is a collection of libraries which adds a thin abstraction layer on
+ top of video4linux2 devices. The purpose of this (thin) layer is to make it
+ easy for application writers to support a wide variety of devices without
+ having to write separate code for different devices in the same class. libv4l
+ consists of 3 different libraries: libv4lconvert, libv4l1 and libv4l2.
+ .
+ libv4lconvert offers functions to convert from any (known) pixelformat
+ to BGR24, RGB24, YUV420 and YVU420.
+ .
+ libv4l1 offers the (deprecated) v4l1 API on top of v4l2 devices, independent
+ of the drivers for those devices supporting v4l1 compatibility (which many
+ v4l2 drivers do not).
+ .
+ libv4l2 offers the v4l2 API on top of v4l2 devices, while adding for the
+ application transparent libv4lconvert conversion where necessary.
+ .
+ This package contains the 32 bits version of the development files (headers
+ and static libraries).
+
+Package: v4l-utils
+Section: utils
+Architecture: any
+Depends: libv4l-0 (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Conflicts: ivtv-utils
+Description: Collection of command line video4linux utilities
+ v4l-utils contains the following video4linux command line utilities:
+ .
+  decode_tm6000: decodes tm6000 proprietary format streams
+  v4l2-compliance: tool to test v4l2 API compliance of drivers
+  v4l2-ctl, cx18-ctl, ivtv-ctl: tools to control v4l2 controls from the cmdline
+  v4l2-dbg: tool to directly get and set registers of v4l2 devices
+  v4l2-sysfs-path: sysfs helper tool
+
+Package: qv4l2
+Section: utils
+Architecture: any
+Depends: libv4l-0 (= ${binary:Version}),
+         ${shlibs:Depends},
+         ${misc:Depends}
+Description: Graphical Qt v4l2 control panel
+ Qt v4l2 control panel application. You can change all through the v4l2
+ interface exposed device controls.

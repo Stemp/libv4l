@@ -1,0 +1,68 @@
+#!/usr/bin/make -f
+
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
+
+build: build-stamp
+build-stamp:
+	dh_testdir
+	dh_prep
+	dh_installdirs -s
+	#
+	# The Debian library packaging guide mandates that private library subdirs
+	# must be versioned with the library package name. However this would break
+	# compatibility with older packages so for libv4l-0 lib/libv4l is used.
+	# If upstream bumps soname and the package name becomes libv4l-1, use
+	# LIBSUBDIR=libv4l-1 as $(MAKE) argument to allow different soname versions
+	# to be installed side by side.
+	#
+	# build shared libs and install
+	$(MAKE) PREFIX=/usr DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) PREFIX=/usr DESTDIR=$(CURDIR)/debian/tmp install
+	# clean object files
+	$(MAKE) clean
+	# build static libs and install
+	$(MAKE) -C lib PREFIX=/usr DESTDIR=$(CURDIR)/debian/tmp LINKTYPE=static
+	$(MAKE) -C lib PREFIX=/usr DESTDIR=$(CURDIR)/debian/tmp LINKTYPE=static install
+ifeq ($(DEB_HOST_ARCH), amd64)
+	# clean object files
+	$(MAKE) clean
+	# build 32 bit shared libs and install
+	$(MAKE) -C lib CPPFLAGS+=-m32 LDFLAGS+=-m32 PREFIX=/usr LIBDIR=/usr/lib32 DESTDIR=$(CURDIR)/debian/tmp
+	$(MAKE) -C lib CPPFLAGS+=-m32 LDFLAGS+=-m32 PREFIX=/usr LIBDIR=/usr/lib32 DESTDIR=$(CURDIR)/debian/tmp install
+	# clean object files
+	$(MAKE) clean
+	# build 32 bit static libs and install
+	$(MAKE) -C lib CPPFLAGS+=-m32 LDFLAGS+=-m32 PREFIX=/usr LIBDIR=/usr/lib32 DESTDIR=$(CURDIR)/debian/tmp LINKTYPE=static
+	$(MAKE) -C lib CPPFLAGS+=-m32 LDFLAGS+=-m32 PREFIX=/usr LIBDIR=/usr/lib32 DESTDIR=$(CURDIR)/debian/tmp LINKTYPE=static install
+endif
+	touch $@
+
+clean:
+	dh_testdir
+	dh_testroot
+	$(MAKE) clean
+	dh_clean
+	rm -f build-stamp
+
+binary-indep: build
+
+binary-arch: build
+	dh_testdir
+	dh_testroot
+	dh_lintian -s
+	dh_installchangelogs -plibv4l-0 ChangeLog
+	dh_installdocs -plibv4l-0
+	dh_install -s --sourcedir=debian/tmp
+	dh_link -s
+	dh_strip -s
+	dh_compress -s
+	dh_fixperms -s
+	dh_makeshlibs -s
+	dh_installdeb -s
+	dh_shlibdeps -s
+	dh_gencontrol -s
+	dh_md5sums -s
+	dh_builddeb -s
+
+binary: binary-indep binary-arch
+.PHONY: build clean binary-indep binary-arch binary
